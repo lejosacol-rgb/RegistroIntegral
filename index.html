@@ -3,256 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Registro de Novedad</title>
-
-<!-- PWA -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0d6efd">
+<title>Sistema de Registro Rápido</title>
 
 <style>
-:root{
-  --primario:#0d6efd;
-  --whatsapp:#25D366;
-  --fondo:#f1f4f8;
-  --card:#ffffff;
-  --texto:#1f2937;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5}
+header{background:#1e3a8a;color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center}
+header button{background:#3b82f6;border:none;color:#fff;padding:8px 12px;border-radius:6px;cursor:pointer}
+main{padding:20px;max-width:900px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+main button{padding:20px;border:none;border-radius:12px;background:#3b82f6;color:#fff;font-size:16px;cursor:pointer}
 
-*{box-sizing:border-box;}
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);justify-content:center;align-items:center;z-index:1000}
+.modal-content{background:#fff;width:95%;max-width:700px;max-height:90vh;overflow:auto;padding:20px;border-radius:12px;position:relative}
+.close{position:absolute;top:10px;right:10px;background:#ef4444;color:#fff;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer}
 
-body{
-  margin:0;
-  font-family:Segoe UI, Roboto, Arial, sans-serif;
-  background:var(--fondo);
-  color:var(--texto);
-}
+.field{margin-bottom:15px}
+.field label{display:block;margin-bottom:5px;font-weight:bold}
+.field input,.field select{width:100%;padding:8px;border-radius:6px;border:1px solid #ccc}
 
-header{
-  background:linear-gradient(135deg,#0d6efd,#0b5ed7);
-  color:#fff;
-  padding:22px 16px;
-  text-align:center;
-}
+/* DOCUMENTO */
+.doc-grupo{display:flex;gap:6px}
+.doc-grupo select{width:80px;flex-shrink:0}
+.doc-grupo input{flex:1}
 
-header h1{
-  margin:0;
-  font-size:1.3rem;
-}
+.send-btn{background:#10b981;color:#fff;padding:12px;border:none;border-radius:8px;width:100%;cursor:pointer}
+.button-camera{background:#3b82f6;color:#fff;padding:10px;border:none;border-radius:6px;width:100%;cursor:pointer}
 
-header p{
-  margin:6px 0 0;
-  font-size:0.85rem;
-  opacity:.9;
-}
-
-main{
-  padding:16px;
-  display:flex;
-  justify-content:center;
-}
-
-.card{
-  background:var(--card);
-  width:100%;
-  max-width:420px;
-  border-radius:18px;
-  padding:20px 16px 24px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.section-title{
-  font-size:0.85rem;
-  font-weight:600;
-  margin-bottom:12px;
-  color:#374151;
-}
-
-.field{
-  margin-bottom:14px;
-}
-
-.field label{
-  display:block;
-  font-size:0.8rem;
-  font-weight:600;
-  margin-bottom:6px;
-}
-
-.field input{
-  width:100%;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #d1d5db;
-  font-size:0.95rem;
-}
-
-.field input:focus{
-  outline:none;
-  border-color:var(--primario);
-}
-
-button{
-  width:100%;
-  padding:16px;
-  margin-top:18px;
-  border:none;
-  border-radius:16px;
-  font-size:1.05rem;
-  font-weight:700;
-  background:linear-gradient(135deg,#25D366,#1ebe57);
-  color:#fff;
-}
-
-footer{
-  text-align:center;
-  font-size:0.7rem;
-  color:#6b7280;
-  margin:10px 0 16px;
-}
-
-/* MÓVIL: pantalla completa */
-@media (max-width:480px){
-  main{padding:0;}
-  .card{
-    min-height:100vh;
-    border-radius:0;
-    box-shadow:none;
-  }
-}
+.preview-foto{display:none;margin-top:10px;max-width:100%;border-radius:8px;border:1px solid #ccc}
+.aviso-foto{display:none;margin-top:8px;padding:8px;background:#ecfeff;border:1px solid #67e8f9;border-radius:6px;color:#0369a1;font-size:14px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>Registro de Novedad</h1>
-  <p>Ingreso inmediato · QR / Enlace directo</p>
+<h2>Sistema de Registro Rápido</h2>
+<button onclick="abrirModal('config')">Configuración</button>
 </header>
 
 <main>
-  <div class="card">
-
-    <div class="section-title">Información del ingreso</div>
-
-    <form>
-
-      <div class="field">
-        <label>Número de WhatsApp receptor</label>
-        <input type="tel" id="telefono" placeholder="Ej: 573001234567" required>
-      </div>
-
-      <div class="field">
-        <label>Lugar del ingreso</label>
-        <input list="lugares" id="lugar" placeholder="Ej: Urgencias" required>
-        <datalist id="lugares"></datalist>
-      </div>
-
-      <div class="field">
-        <label>Nombre completo</label>
-        <input type="text" id="nombre" placeholder="Nombre del paciente" required>
-      </div>
-
-      <div class="field">
-        <label>Cédula</label>
-        <input type="text" id="cedula" placeholder="Número de identificación" required>
-      </div>
-
-      <div class="field">
-        <label>Novedad</label>
-        <input list="novedades" id="novedad" placeholder="Seleccione o escriba la novedad" required>
-        <datalist id="novedades"></datalist>
-      </div>
-
-      <div class="field">
-        <label>Trasladado por</label>
-        <input list="traslado" id="trasladado" placeholder="Ej: Policía Nacional" required>
-        <datalist id="traslado"></datalist>
-      </div>
-
-      <button type="button" onclick="enviarWhatsApp()">WhatsApp</button>
-
-    </form>
-
-  </div>
+<button onclick="abrirModal('novedades')">Registro de Novedades</button>
+<button onclick="abrirModal('retiros')">Retiros Voluntarios</button>
+<button onclick="abrirModal('remitidos')">Pacientes Remitidos</button>
+<button onclick="abrirModal('dialisis')">Equipos de Diálisis</button>
 </main>
 
-<footer>
-  Sistema de registro rápido
-</footer>
+<!-- ================= NOVEDADES ================= -->
+<div class="modal" id="novedades"><div class="modal-content">
+<button class="close" onclick="cerrarModal('novedades')">✕</button>
+<h3>Registro de Novedades</h3>
+
+<div class="field"><label>Ingreso / Salida</label>
+<select id="tipoNovedad"><option>Ingreso</option><option>Salida</option></select></div>
+
+<div class="field"><label>Fecha</label><input id="fechaNovedad" readonly></div>
+<div class="field"><label>Hora</label><input id="horaNovedad" readonly></div>
+<div class="field"><label>Lugar</label><input id="lugarNovedad"></div>
+<div class="field"><label>Nombre</label><input id="nombreNovedad"></div>
+
+<div class="field"><label>Edad</label>
+<input type="number" id="edadNovedad">
+<select id="edadTipoNovedad"><option>Años</option><option>Meses</option></select>
+</div>
+
+<div class="field"><label>Documentación</label>
+<div class="doc-grupo">
+<select id="docTipoNovedad"><option>C.C</option><option>T.I</option></select>
+<input id="docNumeroNovedad">
+</div></div>
+
+<div class="field"><label>Novedad</label><input id="detalleNovedad"></div>
+<div class="field"><label>Trasladado por</label><input id="trasladoNovedad"></div>
+
+<button class="send-btn" onclick="enviarWhatsApp('novedades')">Enviar WhatsApp</button>
+</div></div>
+
+<!-- ================= RETIROS ================= -->
+<div class="modal" id="retiros"><div class="modal-content">
+<button class="close" onclick="cerrarModal('retiros')">✕</button>
+<h3>Retiros Voluntarios</h3>
+
+<div class="field"><label>Ingreso / Salida</label>
+<select id="tipoRetiro"><option>Salida voluntaria</option></select></div>
+
+<div class="field"><label>Fecha</label><input id="fechaRetiro" readonly></div>
+<div class="field"><label>Hora</label><input id="horaRetiro" readonly></div>
+<div class="field"><label>Nombre</label><input id="nombreRetiro"></div>
+
+<div class="field"><label>Documentación</label>
+<div class="doc-grupo">
+<select id="docTipoRetiro"><option>C.C</option><option>T.I</option></select>
+<input id="docNumeroRetiro">
+</div></div>
+
+<div class="field"><label>Edad</label>
+<input type="number" id="edadRetiro">
+<select id="edadTipoRetiro"><option>Años</option><option>Meses</option></select>
+</div>
+
+<div class="field"><label>Novedad</label><input id="detalleRetiro"></div>
+<div class="field"><label>Médico</label><input id="medicoRetiro"></div>
+
+<button class="send-btn" onclick="enviarWhatsApp('retiros')">Enviar WhatsApp</button>
+</div></div>
+
+<!-- ================= REMITIDOS ================= -->
+<div class="modal" id="remitidos"><div class="modal-content">
+<button class="close" onclick="cerrarModal('remitidos')">✕</button>
+<h3>Pacientes Remitidos</h3>
+
+<div class="field"><label>Ingreso / Salida</label>
+<select id="tipoRemitido"><option>Ingreso</option><option>Salida</option></select></div>
+
+<div class="field"><label>Fecha</label><input id="fechaRemitido" readonly></div>
+<div class="field"><label>Hora</label><input id="horaRemitido" readonly></div>
+<div class="field"><label>Nombre</label><input id="nombreRemitido"></div>
+
+<div class="field"><label>Documentación</label>
+<div class="doc-grupo">
+<select id="docTipoRemitido"><option>C.C</option><option>T.I</option></select>
+<input id="docNumeroRemitido">
+</div></div>
+
+<div class="field"><label>Edad</label>
+<input type="number" id="edadRemitido">
+<select id="edadTipoRemitido"><option>Años</option><option>Meses</option></select>
+</div>
+
+<div class="field"><label>Profesional</label><input id="profesionalRemitido"></div>
+<div class="field"><label>Ambulancia</label><input id="ambulanciaRemitido"></div>
+<div class="field"><label>Placa</label><input id="placaRemitido"></div>
+<div class="field"><label>Origen / Destino</label><input id="origenDestinoRemitido"></div>
+
+<button class="send-btn" onclick="enviarWhatsApp('remitidos')">Enviar WhatsApp</button>
+</div></div>
+
+<!-- ================= DIALISIS ================= -->
+<div class="modal" id="dialisis"><div class="modal-content">
+<button class="close" onclick="cerrarModal('dialisis')">✕</button>
+<h3>Equipos de Diálisis</h3>
+
+<div class="field"><label>Ingreso / Salida</label>
+<select id="tipoDialisis"><option>Ingreso</option><option>Salida</option></select></div>
+
+<div class="field"><label>Fecha</label><input id="fechaDialisis" readonly></div>
+<div class="field"><label>Hora</label><input id="horaDialisis" readonly></div>
+<div class="field"><label>Empresa</label><input id="empresaDialisis"></div>
+<div class="field"><label>Transportado por</label><input id="transportadoDialisis"></div>
+
+<div class="field"><label>Documentación</label>
+<div class="doc-grupo">
+<select id="docTipoDialisis"><option>C.C</option><option>T.I</option></select>
+<input id="docNumeroDialisis">
+</div></div>
+
+<div class="field"><label>Destino</label><input id="destinoDialisis"></div>
+
+<div class="field">
+<label>📸 Evidencia</label>
+<button class="button-camera" onclick="fotoDialisis.click()">📷 Tomar Foto</button>
+<input type="file" id="fotoDialisis" accept="image/*" capture="camera" hidden>
+<img id="previewDialisis" class="preview-foto">
+<div id="avisoFotoDialisis" class="aviso-foto">🔔 Foto lista para adjuntar en WhatsApp</div>
+</div>
+
+<button class="send-btn" onclick="enviarWhatsApp('dialisis')">Enviar WhatsApp</button>
+</div></div>
+
+<!-- CONFIG -->
+<div class="modal" id="config"><div class="modal-content">
+<button class="close" onclick="cerrarModal('config')">✕</button>
+<h3>Configuración</h3>
+<input id="numeroWhatsApp" placeholder="573001234567">
+<button class="send-btn" onclick="guardarNumero()">Guardar</button>
+</div></div>
 
 <script>
-// ===== DATOS BASE =====
-const datos = {
-  lugares: ["Urgencias", "Acceso Principal"],
-  novedades: [
-    "Persona herida por arma de fuego",
-    "Persona herida por arma blanca",
-    "Persona herida por agresión de la comunidad"
-  ],
-  traslado: ["Policía Nacional", "Comunidad", "Amigos / Familiares"]
-};
+function abrirModal(id){document.getElementById(id).style.display='flex'}
+function cerrarModal(id){document.getElementById(id).style.display='none'}
 
-// ===== CARGAR LISTAS =====
-function cargarDatalist(id, base){
-  const dl = document.getElementById(id);
-  const guardados = JSON.parse(localStorage.getItem(id)) || base;
-  dl.innerHTML = "";
-  guardados.forEach(v=>{
-    const o=document.createElement("option");
-    o.value=v;
-    dl.appendChild(o);
-  });
+function guardarNumero(){
+localStorage.setItem('whatsapp',numeroWhatsApp.value)
+alert('Número guardado')
+cerrarModal('config')
 }
 
-cargarDatalist("lugares", datos.lugares);
-cargarDatalist("novedades", datos.novedades);
-cargarDatalist("traslado", datos.traslado);
+fotoDialisis.addEventListener('change',e=>{
+const f=e.target.files[0];if(!f)return
+const r=new FileReader()
+r.onload=ev=>{
+previewDialisis.src=ev.target.result
+previewDialisis.style.display='block'
+avisoFotoDialisis.style.display='block'
+}
+r.readAsDataURL(f)
+})
 
-// ===== TELÉFONO GUARDADO =====
-const telefonoEl=document.getElementById("telefono");
-const lugarEl=document.getElementById("lugar");
-const nombreEl=document.getElementById("nombre");
-const cedulaEl=document.getElementById("cedula");
-const novedadEl=document.getElementById("novedad");
-const trasladadoEl=document.getElementById("trasladado");
+function enviarWhatsApp(v){
+const n=localStorage.getItem('whatsapp')
+if(!n){alert('Configure WhatsApp');return}
+let m=''
+if(v==='novedades'){
+m=`📝 Novedades
+${tipoNovedad.value}
+Nombre: ${nombreNovedad.value}
+Edad: ${edadNovedad.value} ${edadTipoNovedad.value}
+Documento: ${docTipoNovedad.value} ${docNumeroNovedad.value}
+Lugar: ${lugarNovedad.value}
+Detalle: ${detalleNovedad.value}
+Traslado: ${trasladoNovedad.value}`
+}
+if(v==='retiros'){
+m=`📝 Retiro Voluntario
+Nombre: ${nombreRetiro.value}
+Documento: ${docTipoRetiro.value} ${docNumeroRetiro.value}
+Médico: ${medicoRetiro.value}`
+}
+if(v==='remitidos'){
+m=`📝 Remitido
+${tipoRemitido.value}
+Nombre: ${nombreRemitido.value}
+Documento: ${docTipoRemitido.value} ${docNumeroRemitido.value}
+Ambulancia: ${ambulanciaRemitido.value}`
+}
+if(v==='dialisis'){
+m=`📝 Diálisis
+${tipoDialisis.value}
+Empresa: ${empresaDialisis.value}
+Documento: ${docTipoDialisis.value} ${docNumeroDialisis.value}
+Destino: ${destinoDialisis.value}
 
-const telGuardado = localStorage.getItem("telefono_guardado");
-if(telGuardado){
-  telefonoEl.value = telGuardado;
+📸 Foto tomada. Adjuntar manualmente`
+}
+window.open(`https://wa.me/${n}?text=${encodeURIComponent(m)}`)
 }
 
-// ===== ENVIAR WHATSAPP =====
-function enviarWhatsApp(){
-  const telefono = telefonoEl.value.trim();
-  const lugar = lugarEl.value.trim();
-  const nombre = nombreEl.value.trim();
-  const cedula = cedulaEl.value.trim();
-  const novedad = novedadEl.value.trim();
-  const trasladado = trasladadoEl.value.trim();
-
-  if(!telefono||!lugar||!nombre||!cedula||!novedad||!trasladado){
-    alert("Complete todos los campos");
-    return;
-  }
-
-  localStorage.setItem("telefono_guardado", telefono);
-
-  const ahora = new Date();
-  const mensaje =
-`🚨 REGISTRO DE NOVEDAD
-
-📍 Lugar: ${lugar}
-👤 Nombre: ${nombre}
-🆔 Cédula: ${cedula}
-📋 Novedad: ${novedad}
-🚑 Trasladado por: ${trasladado}
-📅 Fecha: ${ahora.toLocaleDateString()}
-⏰ Hora: ${ahora.toLocaleTimeString()}`;
-
-  window.location.href =
-    "https://wa.me/"+telefono+"?text="+encodeURIComponent(mensaje);
-}
+(function(){
+const d=new Date(),f=d.toLocaleDateString('es-CO'),h=d.toLocaleTimeString('es-CO')
+;['Novedad','Retiro','Remitido','Dialisis'].forEach(t=>{
+if(document.getElementById('fecha'+t))document.getElementById('fecha'+t).value=f
+if(document.getElementById('hora'+t))document.getElementById('hora'+t).value=h
+})
+})()
 </script>
 
 </body>
