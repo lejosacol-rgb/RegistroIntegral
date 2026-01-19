@@ -8,316 +8,294 @@
 <style>
 body{font-family:Arial,Helvetica,sans-serif;margin:0;background:#f4f6f8}
 header{background:#0b5ed7;color:#fff;padding:12px;text-align:center;font-size:18px}
-nav{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:#e9ecef}
-nav button{padding:8px 12px;border:none;border-radius:6px;background:#0b5ed7;color:#fff;cursor:pointer}
+nav{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:#e9ecef;justify-content:center}
+nav button{padding:10px 16px;border:none;border-radius:10px;background:#0b5ed7;color:#fff;font-size:15px;cursor:pointer}
 nav button.secondary{background:#6c757d}
-section{display:none;padding:10px}
-section.active{display:block}
-.card{background:#fff;border-radius:8px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+
+/* ===== MODAL GENERAL ===== */
+.modal-bg{
+ position:fixed;top:0;left:0;width:100%;height:100%;
+ background:rgba(0,0,0,.6);
+ display:none;align-items:center;justify-content:center;
+ z-index:1000;
+}
+.modal{
+ background:#fff;border-radius:14px;
+ width:92%;max-width:520px;
+ padding:16px;max-height:90vh;
+ overflow:auto;
+ box-shadow:0 10px 35px rgba(0,0,0,.4);
+ animation:zoom .2s ease;
+ position:relative;
+}
+@keyframes zoom{from{transform:scale(.9);opacity:.6}to{transform:scale(1);opacity:1}}
+.modal h3{text-align:center;margin-top:0}
+.modal-close{
+ position:absolute;top:12px;right:14px;
+ background:#dc3545;color:#fff;border:none;
+ border-radius:50%;width:34px;height:34px;
+ cursor:pointer;font-weight:bold;
+}
+
+/* ===== FORM ===== */
 .field{margin-bottom:10px}
 .field label{font-weight:bold;display:block;margin-bottom:4px}
-.field input,.field select,.field textarea{
- width:100%;padding:8px;border-radius:6px;border:1px solid #ccc;font-size:15px
+.field input,.field select{
+ width:100%;padding:9px;border-radius:8px;border:1px solid #ccc;font-size:15px
 }
-.actions{display:flex;gap:6px;flex-wrap:wrap}
-.actions button{flex:1;padding:10px;border:none;border-radius:6px;font-size:15px;cursor:pointer}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions button{flex:1;padding:10px;border:none;border-radius:10px;font-size:15px;cursor:pointer}
 .send{background:#25d366;color:#fff}
 .clear{background:#dc3545;color:#fff}
 .save{background:#0b5ed7;color:#fff}
+
+/* ===== CONFIG ===== */
+section{display:none;padding:12px}
+section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:14px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.big-btn{
+ display:block;margin:16px auto;padding:14px 22px;
+ font-size:16px;border-radius:12px;
+ background:linear-gradient(135deg,#0b5ed7,#0d6efd);
+ color:#fff;border:none;cursor:pointer;
+ box-shadow:0 4px 14px rgba(0,0,0,.25);
+}
+.big-btn:hover{opacity:.9}
 .hidden{display:none}
+
+/* ===== ICON PICKER ===== */
+.icon-grid{
+ display:grid;
+ grid-template-columns:repeat(auto-fill,minmax(48px,1fr));
+ gap:10px;
+ text-align:center;
+}
+.icon-btn{
+ font-size:24px;
+ padding:8px;
+ border-radius:10px;
+ cursor:pointer;
+ background:#f1f3f5;
+ transition:.2s;
+}
+.icon-btn:hover{
+ background:#0b5ed7;
+ color:#fff;
+ transform:scale(1.1);
+}
 </style>
 </head>
 
 <body>
 
-<header>NoveClinic – Registro Inteligente Escalable</header>
-
+<header>NoveClinic – Registro Inteligente</header>
 <nav id="mainNav"></nav>
 
-<!-- ================= CONFIG ================= -->
+<!-- CONFIG -->
 <section id="config">
 <div class="card">
-<h3>⚙️ Configuración</h3>
+<h3 style="text-align:center">⚙️ Configuración</h3>
 
-<h4>➕ Crear ventana</h4>
 <input id="newWinName" placeholder="Nombre de la ventana">
-<button class="save" onclick="createWindow()">Crear ventana</button>
-
-<hr>
-
-<h4>✏️ Renombrar ventanas</h4>
-<div id="renameManager"></div>
-
-<hr>
-
-<h4>🗑️ Eliminar ventanas</h4>
-<div id="windowManager"></div>
-
-<hr>
-
-<h4>➕ Crear campo fijo</h4>
-<input id="ff_name" placeholder="Nombre del campo">
-<select id="ff_type">
-<option value="text">Texto</option>
-<option value="number">Número</option>
-</select>
-<div id="ff_windows"></div>
-<button class="save" onclick="addFixedField()">Guardar campo fijo</button>
+<button class="big-btn" onclick="createWindow()">➕ Crear ventana</button>
 
 <hr>
 
 <h4>➕ Crear etiqueta dinámica</h4>
+
+<div class="field">
+<label>Ícono</label>
+<div style="display:flex;gap:8px">
+<input id="lbl_icon" placeholder="Selecciona un ícono" readonly>
+<button onclick="openIconPicker()">🎨</button>
+</div>
+</div>
+
 <input id="lbl_name" placeholder="Nombre etiqueta">
+
 <select id="lbl_type">
 <option value="text">Texto</option>
 <option value="number">Número</option>
 <option value="select">Desplegable</option>
+<option value="auto">⚙️ Automático</option>
 </select>
+
 <input id="lbl_values" placeholder="Valores (coma separados)">
+
+<div id="auto_options" class="field hidden">
+<label>Valor automático</label>
+<select id="lbl_auto">
+<option value="date">📅 Fecha</option>
+<option value="time">⏰ Hora</option>
+<option value="datetime">📅⏰ Fecha y hora</option>
+</select>
+</div>
+
 <div id="label_windows"></div>
-<button class="save" onclick="addLabel()">Guardar etiqueta</button>
-
-<hr>
-
-<h4>🛠️ Administrar etiquetas</h4>
-<div id="labelManager"></div>
-
+<button class="big-btn" onclick="addLabel()">Guardar etiqueta</button>
 </div>
 </section>
 
-<!-- ================= PREVIEW ================= -->
-<div id="preview" class="card hidden">
-<textarea id="previewTxt" rows="8"></textarea>
-<div class="actions">
-<button class="send" onclick="sendWA()">Enviar WhatsApp</button>
-<button onclick="closePreview()">Cerrar</button>
+<!-- MODAL FORM -->
+<div id="modalBg" class="modal-bg">
+<div class="modal">
+<button class="modal-close" onclick="closeModal()">×</button>
+<div id="modalContent"></div>
+</div>
+</div>
+
+<!-- MODAL ICON PICKER -->
+<div id="iconBg" class="modal-bg">
+<div class="modal">
+<button class="modal-close" onclick="closeIconPicker()">×</button>
+<h3>🎨 Selecciona un ícono</h3>
+<div class="icon-grid" id="iconGrid"></div>
 </div>
 </div>
 
 <script>
-/* ================= STORAGE ================= */
+/* ===== STORAGE ===== */
 function get(k){return JSON.parse(localStorage.getItem(k)||"{}")}
 function set(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
-/* ================= STRUCTURE ================= */
-let structure = get("structure");
+/* ===== STRUCTURE ===== */
+let structure=get("structure");
 if(!structure.windows){
- structure={
-  windows:{
-   base:{name:"Ventana Base",fixedFields:[]}
-  },
-  labels:{}
- };
+ structure={windows:{base:{name:"Ventana Base"}},labels:{}};
  set("structure",structure);
 }
 
-/* ================= INIT ================= */
+/* ===== INIT ===== */
 function init(){
  mainNav.innerHTML="";
- document.querySelectorAll("section:not(#config)").forEach(s=>s.remove());
-
  Object.entries(structure.windows).forEach(([id,w])=>{
-  createSection(id,w.name);
+  const b=document.createElement("button");
+  b.textContent=w.name;
+  b.onclick=()=>openModal(id);
+  mainNav.appendChild(b);
  });
-
- addConfigBtn();
- renderRename();
- renderWindowManager();
- renderFFWindows();
+ const cfg=document.createElement("button");
+ cfg.textContent="⚙️ Configuración";
+ cfg.className="secondary";
+ cfg.onclick=()=>openWin("config");
+ mainNav.appendChild(cfg);
  renderLabelWindows();
- renderLabels();
 }
 init();
 
-/* ================= NAV ================= */
-function addConfigBtn(){
- const b=document.createElement("button");
- b.textContent="⚙️ Configuración";
- b.className="secondary";
- b.onclick=()=>openWin("config");
- mainNav.appendChild(b);
+/* ===== MODAL FORM ===== */
+function openModal(win){
+ modalContent.innerHTML=`<h3>${structure.windows[win].name}</h3><div id="custom_${win}"></div>
+ <div class="actions">
+ <button class="send" onclick="previewWA('${win}')">📤 WhatsApp</button>
+ <button class="clear" onclick="clearForm('${win}')">🧹 Limpiar</button>
+ </div>`;
+ modalBg.style.display="flex";
+ renderLabels();
 }
+function closeModal(){modalBg.style.display="none"}
 function openWin(id){
  document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
  document.getElementById(id).classList.add("active");
 }
 
-/* ================= WINDOWS ================= */
-function createWindow(){
- const n=newWinName.value.trim();
- if(!n) return alert("Nombre requerido");
- const id="win_"+Date.now();
- structure.windows[id]={name:n,fixedFields:[]};
- set("structure",structure);
- init();
- openWin(id);
- newWinName.value="";
-}
-function createSection(id,name){
- const b=document.createElement("button");
- b.textContent=name;
- b.onclick=()=>openWin(id);
- mainNav.appendChild(b);
+/* ===== ICON PICKER ===== */
+const icons=[
+"👤","🆔","📅","⏰","📅⏰","🏥","🚑","⚠️","📝","📍","📞","💊","🩺","🩸","🧠","❤️","🔢","📄","📂","🧾"
+];
 
- const s=document.createElement("section");
- s.id=id;
- s.innerHTML=`
-  <div class="card">
-   <h3>${name}</h3>
-   <div id="fixed_${id}"></div>
-   <div id="custom_${id}"></div>
-   <div class="actions">
-    <button class="send" onclick="previewWA('${id}')">📤 WhatsApp</button>
-    <button class="clear" onclick="clearForm('${id}')">🧹 Limpiar</button>
-   </div>
-  </div>`;
- document.body.insertBefore(s,document.getElementById("config"));
- renderFixedFields(id);
-}
-
-/* ================= FIXED FIELDS ================= */
-function renderFixedFields(win){
- const c=document.getElementById("fixed_"+win);
- c.innerHTML="";
- structure.windows[win].fixedFields.forEach(f=>{
-  const d=document.createElement("div");
-  d.className="field";
-  d.innerHTML=`<label>${f.name}</label><input type="${f.type}">`;
-  c.appendChild(d);
+function openIconPicker(){
+ iconGrid.innerHTML="";
+ icons.forEach(i=>{
+  const b=document.createElement("div");
+  b.className="icon-btn";
+  b.textContent=i;
+  b.onclick=()=>{lbl_icon.value=i;closeIconPicker()};
+  iconGrid.appendChild(b);
  });
+ iconBg.style.display="flex";
 }
-function addFixedField(){
- const name=ff_name.value.trim();
- if(!name) return;
- document.querySelectorAll("#ff_windows input:checked").forEach(ch=>{
-  structure.windows[ch.value].fixedFields.push({name:name,type:ff_type.value});
- });
- set("structure",structure);
- ff_name.value="";
- init();
+function closeIconPicker(){iconBg.style.display="none"}
+
+/* ===== LABELS ===== */
+lbl_type.addEventListener("change",()=>{
+ auto_options.classList.toggle("hidden",lbl_type.value!=="auto");
+});
+
+function autoValue(t){
+ const d=new Date();
+ if(t==="date")return d.toLocaleDateString("es-CO");
+ if(t==="time")return d.toLocaleTimeString("es-CO");
+ if(t==="datetime")return d.toLocaleString("es-CO");
+ return "";
 }
 
-/* ================= LABELS ================= */
 function addLabel(){
  const id="lbl_"+Date.now();
- const windows={};
- document.querySelectorAll("#label_windows input").forEach(c=>windows[c.value]=c.checked);
-
+ const win={};
+ document.querySelectorAll("#label_windows input").forEach(c=>win[c.value]=c.checked);
  structure.labels[id]={
+  icon:lbl_icon.value||"",
   name:lbl_name.value,
   type:lbl_type.value,
-  values:lbl_values.value.split(",").map(v=>v.trim()).filter(v=>v),
-  windows:windows
+  values:lbl_values.value.split(",").map(v=>v.trim()),
+  auto:lbl_type.value==="auto"?lbl_auto.value:null,
+  windows:win
  };
  set("structure",structure);
- lbl_name.value=""; lbl_values.value="";
- renderLabels();
- renderLabelManager();
+ lbl_icon.value="";lbl_name.value="";lbl_values.value="";
 }
+
 function renderLabels(){
- Object.keys(structure.windows).forEach(win=>{
-  const cont=document.getElementById("custom_"+win);
-  cont.innerHTML="";
+ Object.keys(structure.windows).forEach(w=>{
+  const c=document.getElementById("custom_"+w);
+  if(!c)return;
+  c.innerHTML="";
   Object.values(structure.labels).forEach(l=>{
-   if(l.windows[win]){
+   if(l.windows[w]){
     const d=document.createElement("div");
     d.className="field";
-    d.innerHTML=`<label>${l.name}</label>`;
+    d.innerHTML=`<label>${l.icon?l.icon+" ":""}${l.name}</label>`;
     let el;
     if(l.type==="select"){
      el=document.createElement("select");
      l.values.forEach(v=>el.add(new Option(v,v)));
-    }else{
+    }else if(l.type==="auto"){
      el=document.createElement("input");
-     if(l.type==="number") el.inputMode="numeric";
-    }
-    d.appendChild(el);
-    cont.appendChild(d);
+     el.value=autoValue(l.auto);el.readOnly=true;
+    }else el=document.createElement("input");
+    d.appendChild(el);c.appendChild(d);
    }
   });
  });
 }
 
-/* ================= MANAGERS ================= */
-function renderRename(){
- renameManager.innerHTML="";
- Object.entries(structure.windows).forEach(([id,w])=>{
-  if(id==="base") return;
-  renameManager.innerHTML+=`
-   <input value="${w.name}" onchange="renameWin('${id}',this.value)">`;
+/* ===== UTILS ===== */
+function previewWA(win){
+ let t="";
+ document.querySelectorAll(`#custom_${win} input,#custom_${win} select`).forEach(e=>{
+  if(e.value)t+=e.previousSibling.textContent+": "+e.value+"\n";
+ });
+ window.open("https://wa.me/?text="+encodeURIComponent(t));
+}
+function clearForm(win){
+ document.querySelectorAll(`#custom_${win} input`).forEach(i=>{
+  if(!i.readOnly)i.value="";
  });
 }
-function renameWin(id,v){
- structure.windows[id].name=v;
+function createWindow(){
+ const n=newWinName.value.trim();
+ if(!n)return;
+ structure.windows["win_"+Date.now()]={name:n};
  set("structure",structure);
  init();
-}
-function renderWindowManager(){
- windowManager.innerHTML="";
- Object.keys(structure.windows).forEach(id=>{
-  if(id==="base") return;
-  windowManager.innerHTML+=`
-   <button class="clear" onclick="deleteWin('${id}')">Eliminar ${structure.windows[id].name}</button><br>`;
- });
-}
-function deleteWin(id){
- if(!confirm("¿Eliminar esta ventana?")) return;
- delete structure.windows[id];
- set("structure",structure);
- init();
- openWin("base");
-}
-function renderFFWindows(){
- ff_windows.innerHTML="";
- Object.keys(structure.windows).forEach(id=>{
-  ff_windows.innerHTML+=`
-   <label><input type="checkbox" value="${id}"> ${structure.windows[id].name}</label><br>`;
- });
+ newWinName.value="";
 }
 function renderLabelWindows(){
  label_windows.innerHTML="";
  Object.keys(structure.windows).forEach(id=>{
-  label_windows.innerHTML+=`
-   <label><input type="checkbox" value="${id}" checked> ${structure.windows[id].name}</label><br>`;
+  label_windows.innerHTML+=`<label><input type="checkbox" value="${id}" checked> ${structure.windows[id].name}</label><br>`;
  });
-}
-function renderLabelManager(){
- labelManager.innerHTML="";
- Object.entries(structure.labels).forEach(([id,l])=>{
-  labelManager.innerHTML+=`
-   <input value="${l.name}" onchange="structure.labels['${id}'].name=this.value;set('structure',structure);renderLabels()">
-   <button onclick="duplicateLabel('${id}')">📑</button>
-   <button onclick="deleteLabel('${id}')">🗑️</button><br>`;
- });
-}
-function duplicateLabel(id){
- const n="lbl_"+Date.now();
- structure.labels[n]=JSON.parse(JSON.stringify(structure.labels[id]));
- structure.labels[n].name+=" (copia)";
- set("structure",structure);
- renderLabelManager();
-}
-function deleteLabel(id){
- delete structure.labels[id];
- set("structure",structure);
- renderLabels(); renderLabelManager();
-}
-
-/* ================= WHATSAPP ================= */
-function previewWA(win){
- let t="";
- document.querySelectorAll(`#${win} input,#${win} select`).forEach(e=>{
-  if(e.value) t+=e.previousSibling.textContent+": "+e.value+"\n";
- });
- previewTxt.value=t;
- preview.classList.remove("hidden");
-}
-function sendWA(){
- window.open("https://wa.me/?text="+encodeURIComponent(previewTxt.value));
-}
-function closePreview(){preview.classList.add("hidden")}
-function clearForm(win){
- document.querySelectorAll(`#${win} input`).forEach(i=>i.value="");
 }
 </script>
 
