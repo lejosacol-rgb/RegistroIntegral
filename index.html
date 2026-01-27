@@ -3,300 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📋 Registro Integral</title>
+<title>Registro Integral de Salud</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f2027">
 
 <style>
 :root{
-  --bg:#f4f6fb;
-  --card:#ffffff;
-  --txt:#222;
-  --pri:#2563eb;
-  --sec:#22c55e;
-  --rad:16px;
+  --bg:#f4f6f8;
+  --card:#fff;
+  --primary:#0f2027;
+  --accent:#2c5364;
+  --text:#111;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --bg:#0f172a;
-    --card:#1e293b;
-    --txt:#e5e7eb;
+    --bg:#0b0f14;
+    --card:#151a21;
+    --text:#f5f5f5;
   }
 }
-*{box-sizing:border-box;font-family:system-ui}
-body{margin:0;background:var(--bg);color:var(--txt)}
-header{
-  padding:14px;
-  font-size:20px;
-  font-weight:700;
-  text-align:center;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui;
+  background:var(--bg);
+  color:var(--text);
 }
-main{padding:16px;display:grid;gap:16px;padding-bottom:90px}
+header{
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:white;
+  padding:16px;
+  text-align:center;
+  font-weight:700;
+}
+#main{
+  padding:16px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:14px;
+}
 .card{
   background:var(--card);
-  border-radius:var(--rad);
-  padding:16px;
+  border-radius:16px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
   box-shadow:0 6px 18px rgba(0,0,0,.08);
-  transition:.2s;
 }
-.card:hover{transform:translateY(-2px)}
-button{
-  border:none;
-  border-radius:12px;
-  padding:10px 14px;
-  background:var(--pri);
-  color:#fff;
-  font-weight:600;
-}
-button.alt{background:var(--sec)}
-button.ghost{background:#64748b}
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #94a3b8;
-  margin-bottom:8px;
-  background:transparent;
-  color:inherit;
-}
-.field{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.icon{font-size:20px}
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:space-around;
-  background:var(--card);
-  padding:10px;
-  box-shadow:0 -4px 10px rgba(0,0,0,.1);
-}
-.nav button{background:none;color:var(--txt);font-size:18px}
+.card:hover{transform:translateY(-4px)}
+.card span{font-size:30px}
+
 .modal{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.5);
+  background:rgba(0,0,0,.6);
   display:none;
-  justify-content:center;
   align-items:center;
-  z-index:1000;
+  justify-content:center;
+  z-index:100;
 }
-.modal.active{display:flex}
-.modal .card{
+.modal-content{
+  background:var(--card);
   width:95%;
   max-width:520px;
   max-height:90vh;
   overflow:auto;
+  border-radius:18px;
+  padding:16px;
 }
-.preview{width:100%;border-radius:12px;margin-top:8px}
 
-/* SPLASH */
+input,select,textarea,button{
+  width:100%;
+  margin-bottom:10px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  font-size:15px;
+}
+button{
+  background:var(--primary);
+  color:white;
+  border:none;
+}
+button.secondary{background:#666}
+
+.fab{
+  position:fixed;
+  top:14px;
+  right:14px;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:var(--accent);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+}
+
+nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:var(--card);
+  display:flex;
+  justify-content:space-around;
+  padding:10px;
+  box-shadow:0 -4px 12px rgba(0,0,0,.15);
+}
+nav span{font-size:22px}
+
 #splash{
   position:fixed;
   inset:0;
-  background:linear-gradient(135deg,#2563eb,#1e3a8a);
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:white;
   display:flex;
-  justify-content:center;
+  flex-direction:column;
   align-items:center;
-  z-index:9999;
-  animation:fadeOut 1s ease forwards;
-  animation-delay:2.5s;
+  justify-content:center;
+  z-index:999;
 }
-.splash-card{text-align:center;color:#fff;animation:pop 1s ease}
-.splash-icon{font-size:64px;margin-bottom:12px}
-@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes fadeOut{to{opacity:0;visibility:hidden}}
 </style>
 </head>
 
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
-  <div class="splash-card">
-    <div class="splash-icon">📋</div>
-    <h1>Registro Integral</h1>
-    <p>Gestión de Salud Digital</p>
-  </div>
+  <div style="font-size:64px">📋</div>
+  <h1>Registro Integral</h1>
+  <small>Cargando…</small>
 </div>
 
-<header>⚙️ 📋 Registro Integral de Salud</header>
-<main id="windows"></main>
+<header>📋 Registro Integral de Salud</header>
 
-<!-- NAV -->
-<div class="nav">
-  <button onclick="openConfig()">⚙️</button>
-  <button onclick="alert('Registro Integral v1.0')">ℹ️</button>
-</div>
+<div id="main"></div>
+
+<div class="fab" onclick="openConfig()">⚙️</div>
+
+<nav>
+  <span>🏠</span>
+  <span onclick="openConfig()">⚙️</span>
+  <span>ℹ️</span>
+</nav>
 
 <!-- CONFIG -->
 <div class="modal" id="config">
-<div class="card">
-<h3>⚙️ Configuración</h3>
+  <div class="modal-content">
+    <h3>⚙️ Configuración</h3>
 
-<input id="wsap" placeholder="Número WhatsApp (57XXXXXXXXXX)">
-<button onclick="save()">Guardar WhatsApp</button>
+    <label>Número WhatsApp</label>
+    <input id="wsap">
 
-<hr>
-<h4>➕ Crear ventana</h4>
-<input id="wName" placeholder="Nombre ventana">
-<input id="wIcon" placeholder="Emoji / ícono">
-<button onclick="addWindow()">Agregar</button>
+    <h4>➕ Crear ventana</h4>
+    <input id="vName" placeholder="Nombre ventana">
+    <input id="vIcon" placeholder="Emoji">
+    <textarea id="vFields" placeholder="Etiqueta | tipo | opciones"></textarea>
 
-<h4>🗑️ Eliminar ventana</h4>
-<select id="delWin"></select>
-<button onclick="delWindow()">Eliminar</button>
+    <button onclick="addWindow()">Guardar ventana</button>
 
-<hr>
-<h4>➕ Crear campo</h4>
-<select id="wSel"></select>
-<input id="fIcon" placeholder="Emoji">
-<input id="fName" placeholder="Nombre campo">
-<select id="fType">
-  <option value="text">Texto</option>
-  <option value="number">Numérico</option>
-  <option value="auto">Automático</option>
-  <option value="select">Desplegable</option>
-  <option value="cam">Cámara</option>
-</select>
-<input id="fOpt" placeholder="Opciones (A|B|C)">
-<button onclick="addField()">Agregar campo</button>
+    <h4>🗑️ Eliminar ventana</h4>
+    <select id="delWin"></select>
+    <button class="secondary" onclick="delWindow()">Eliminar</button>
 
-<hr>
-<h4>⭐ Plantillas</h4>
-<select id="tplWin"></select>
-<input id="tplName" placeholder="Nombre plantilla">
-<button onclick="saveTemplate()">Guardar plantilla</button>
-
-<select id="tplSel"></select>
-<button onclick="applyTemplate()">Aplicar plantilla</button>
-
-<hr>
-<button class="ghost" onclick="closeConfig()">Cerrar</button>
+    <button onclick="closeConfig()">Cerrar</button>
+  </div>
 </div>
+
+<!-- FORM -->
+<div class="modal" id="form">
+  <div class="modal-content">
+    <h3 id="formTitle"></h3>
+    <div id="formBody"></div>
+    <button onclick="sendWA()">📤 Enviar WhatsApp</button>
+    <button class="secondary" onclick="closeForm()">Cerrar</button>
+  </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("appData")) || {
-  wsap:"",
-  windows:[],
-  templates:[]
-};
+const $=id=>document.getElementById(id)
+const get=k=>JSON.parse(localStorage.getItem(k)||"[]")
+const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v))
 
-function save(){
-  data.wsap = wsap.value;
-  localStorage.setItem("appData", JSON.stringify(data));
-  render();
-}
+let windows=get("windows")
+$("wsap").value=localStorage.getItem("wsap")||""
 
-function openConfig(){
-  wsap.value = data.wsap;
-  loadSelects();
-  config.classList.add("active");
+function render(){
+  $("main").innerHTML=""
+  $("delWin").innerHTML=""
+  windows.forEach((w,i)=>{
+    $("main").innerHTML+=`
+      <div class="card" onclick="openForm(${i})">
+        <span>${w.icon}</span><br>${w.name}
+      </div>`
+    $("delWin").innerHTML+=`<option value="${i}">${w.name}</option>`
+  })
 }
-function closeConfig(){config.classList.remove("active")}
+render()
+
+function openConfig(){$("config").style.display="flex"}
+function closeConfig(){
+  localStorage.setItem("wsap",$("wsap").value)
+  $("config").style.display="none"
+}
 
 function addWindow(){
-  if(!wName.value) return;
-  data.windows.push({name:wName.value,icon:wIcon.value||"📋",fields:[]});
-  wName.value=wIcon.value="";
-  save();
+  windows.push({
+    name:$("vName").value,
+    icon:$("vIcon").value||"📋",
+    fields:$("vFields").value.split("\n")
+  })
+  set("windows",windows)
+  render()
 }
 
 function delWindow(){
-  data.windows.splice(delWin.value,1);
-  save();
+  if(confirm("¿Eliminar ventana?")){
+    windows.splice($("delWin").value,1)
+    set("windows",windows)
+    render()
+  }
 }
 
-function addField(){
-  let w = data.windows[wSel.value];
-  w.fields.push({
-    icon:fIcon.value||"🏷️",
-    name:fName.value,
-    type:fType.value,
-    opt:fOpt.value||"",
-    val:""
-  });
-  fIcon.value=fName.value=fOpt.value="";
-  save();
+let current=null
+function openForm(i){
+  current=windows[i]
+  $("formTitle").innerText=current.icon+" "+current.name
+  $("formBody").innerHTML=""
+  current.fields.forEach(f=>{
+    let [n,t,o]=f.split("|").map(x=>x.trim())
+    if(t==="num") $("formBody").innerHTML+=`<input type="number" placeholder="${n}">`
+    else if(t==="tel") $("formBody").innerHTML+=`<input type="tel" placeholder="${n}">`
+    else if(t==="auto") $("formBody").innerHTML+=`<input value="${new Date().toLocaleString()}" readonly>`
+    else if(t==="select"){
+      $("formBody").innerHTML+=`<select>${o.split(",").map(x=>`<option>${x}</option>`).join("")}</select>`
+    } else {
+      $("formBody").innerHTML+=`<input placeholder="${n}">`
+    }
+  })
+  $("form").style.display="flex"
+}
+function closeForm(){$("form").style.display="none"}
+
+function sendWA(){
+  let txt="*"+current.name+"*\n"
+  [...$("formBody").children].forEach(e=>txt+=e.value+"\n")
+  let num=localStorage.getItem("wsap")
+  window.open(`https://wa.me/${num}?text=${encodeURIComponent(txt)}`)
 }
 
-function saveTemplate(){
-  let w=data.windows[tplWin.value];
-  data.templates.push({
-    name:tplName.value,
-    fields:JSON.parse(JSON.stringify(w.fields))
-  });
-  tplName.value="";
-  save();
-}
+setTimeout(()=>$("#splash").style.display="none",1400)
 
-function applyTemplate(){
-  let t=data.templates[tplSel.value];
-  let w=data.windows[wSel.value];
-  t.fields.forEach(f=>w.fields.push(JSON.parse(JSON.stringify(f))));
-  save();
+if("serviceWorker"in navigator){
+  navigator.serviceWorker.register("sw.js")
 }
-
-function loadSelects(){
-  delWin.innerHTML=wSel.innerHTML=tplWin.innerHTML=
-    data.windows.map((w,i)=>`<option value="${i}">${w.icon} ${w.name}</option>`).join("");
-  tplSel.innerHTML=data.templates.map((t,i)=>`<option value="${i}">⭐ ${t.name}</option>`).join("");
-}
-
-function render(){
-  windows.innerHTML="";
-  data.windows.forEach((w,wi)=>{
-    let html=`<div class="card"><h3>${w.icon} ${w.name}</h3>`;
-    w.fields.forEach((f,fi)=>{
-      if(f.type==="cam"){
-        html+=`
-        <div class="field">
-          <span class="icon">${f.icon}</span>
-          <input type="file" accept="image/*" capture="environment"
-          onchange="preview(event,${wi},${fi})">
-        </div>
-        <img id="p${wi}${fi}" class="preview">
-        `;
-      }else if(f.type==="select"){
-        html+=`
-        <div class="field">
-          <span class="icon">${f.icon}</span>
-          <select onchange="data.windows[${wi}].fields[${fi}].val=this.value;save()">
-            ${f.opt.split("|").map(o=>`<option>${o}</option>`).join("")}
-          </select>
-        </div>`;
-      }else{
-        let t=f.type==="number"?"number":"text";
-        let v=f.type==="auto"?new Date().toLocaleString():f.val;
-        html+=`
-        <div class="field">
-          <span class="icon">${f.icon}</span>
-          <input type="${t}" value="${v}"
-          oninput="data.windows[${wi}].fields[${fi}].val=this.value;save()">
-        </div>`;
-      }
-    });
-    html+=`<button class="alt" onclick="send(${wi})">📤 Enviar WhatsApp</button></div>`;
-    windows.innerHTML+=html;
-  });
-}
-
-function preview(e,wi,fi){
-  let r=new FileReader();
-  r.onload=()=>document.getElementById(`p${wi}${fi}`).src=r.result;
-  r.readAsDataURL(e.target.files[0]);
-}
-
-function send(i){
-  let w=data.windows[i];
-  let msg=`${w.icon} ${w.name}%0A`;
-  w.fields.forEach(f=>{
-    msg+=`${f.icon} ${f.name}: ${f.val||""}%0A`;
-  });
-  window.open(`https://wa.me/${data.wsap}?text=${msg}`);
-}
-
-render();
 </script>
 </body>
- </html>
+</html>
