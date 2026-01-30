@@ -419,7 +419,8 @@ function openForm(i){
     d.className="field";
     d.innerHTML=`<label>${f.icon} ${f.name}</label>`;
     if(f.type==="auto"){
-      d.innerHTML+=`<input value="${new Date().toLocaleString()}" disabled>`;
+      // ===== CORRECCIÓN: agregar data-i para fecha/hora =====
+      d.innerHTML+=`<input data-i="${idx}" value="${new Date().toLocaleString()}" disabled>`;
     }else if(f.opt){
       d.innerHTML+=`<select data-i="${idx}">${f.opt.split("|").map(o=>`<option>${o}</option>`).join("")}</select>`;
     }else{
@@ -458,4 +459,4 @@ render();
 </script>
 
 </body>
-</html>
+</html>      
