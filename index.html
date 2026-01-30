@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro Integral de Salud</title>
+
+<style>
+:root{
+  --bg:#f5f5f5;
+  --card:#ffffff;
+  --primary:#1976d2;
+  --text:#222;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#121212;
+    --card:#1e1e1e;
+    --text:#eee;
+  }
+}
+body{
+  margin:0;
+  font-family:system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* SPLASH */
+#splash{
+  position:fixed;
+  inset:0;
+  background:var(--primary);
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  animation:fadeOut .8s ease forwards;
+  animation-delay:1.4s;
+}
+@keyframes fadeOut{to{opacity:0;visibility:hidden}}
+
+header{
+  padding:16px;
+  background:var(--primary);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:20px;
+}
+header button{
+  border:none;
+  background:#ffffff22;
+  color:#fff;
+  border-radius:50%;
+  width:42px;
+  height:42px;
+  font-size:18px;
+}
+
+main{
+  padding:16px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:12px;
+}
+
+.card{
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  font-size:18px;
+  box-shadow:0 6px 14px rgba(0,0,0,.15);
+  cursor:grab;
+  user-select:none;
+}
+.card.dragging{opacity:.5}
+
+button{
+  border:none;
+  border-radius:12px;
+  padding:10px 14px;
+  background:var(--primary);
+  color:#fff;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+.modalContent{
+  background:var(--card);
+  width:92%;
+  max-width:520px;
+  border-radius:18px;
+  padding:16px;
+  max-height:90vh;
+  overflow:auto;
+}
+
+.field{margin-bottom:10px}
+label{font-weight:bold;display:block}
+input,select{
+  width:100%;
+  padding:8px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:6px;
+}
+img.preview{
+  width:100%;
+  border-radius:12px;
+  margin-top:6px;
+}
+
+/* ===== MODAL CONFIRMAR ===== */
+.confirm{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+.confirmBox{
+  background:var(--card);
+  padding:20px;
+  border-radius:18px;
+  width:90%;
+  max-width:340px;
+  text-align:center;
+  animation:zoom .2s ease;
+}
+.confirmBox .row button{flex:1}
+.cancel{background:#aaa}
+.delete{background:#d32f2f}
+
+@keyframes zoom{
+  from{transform:scale(.9);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+</style>
+</head>
+
+<body>
+
+<div id="splash">
+  <h1>🏥 Registro Integral</h1>
+  <p>Sistema de Salud</p>
+</div>
+
+<header>
+  🏥 Registro Integral
+  <button onclick="openConfig()">⚙️</button>
+</header>
+
+<main id="main"></main>
+
+<!-- CONFIG -->
+<div class="modal" id="config">
+<div class="modalContent">
+
+<h3>⚙️ Configuración</h3>
+
+<label>📤 WhatsApp</label>
+<input id="wsap" placeholder="Ej: 573001234567">
+
+<hr>
+<h4>➕ Crear ventana</h4>
+<input id="vName" placeholder="Nombre">
+<input id="vIcon" placeholder="Emoji">
+<button onclick="addWindow()">Agregar</button>
+
+<hr>
+<h4>✏️ Editar ventana</h4>
+<select id="editWin"></select>
+<input id="newWinName" placeholder="Nuevo nombre">
+<input id="newWinIcon" placeholder="Nuevo emoji">
+<button onclick="saveWindowEdit()">Guardar</button>
+
+<hr>
+<h4>🗑️ Eliminar ventana</h4>
+<select id="delWin"></select>
+<button onclick="deleteWindow()">Eliminar</button>
+
+<hr>
+<h4>📄 Duplicar ventana</h4>
+<select id="dupWin"></select>
+<input id="dupName" placeholder="Nuevo nombre">
+<input id="dupIcon" placeholder="Nuevo emoji">
+<button onclick="duplicateWindow()">Duplicar</button>
+
+<hr>
+<h4>🧩 Crear campo</h4>
+<select id="fieldWin"></select>
+<input id="cName" placeholder="Nombre campo">
+<input id="cIcon" placeholder="Emoji">
+<select id="cType">
+  <option value="text">Texto</option>
+  <option value="number">Número</option>
+  <option value="auto">Automático</option>
+</select>
+<input id="cOpt" placeholder="Opciones | separadas">
+<label><input type="checkbox" id="cCam"> Cámara</label>
+<button onclick="addField()">Agregar campo</button>
+
+<hr>
+<h4>✏️ Editar campo</h4>
+<select id="editFieldWin" onchange="loadFields()"></select>
+<select id="editField"></select>
+<input id="editFieldName" placeholder="Nuevo nombre">
+<input id="editFieldIcon" placeholder="Nuevo emoji">
+<button onclick="saveFieldEdit()">Guardar</button>
+
+<hr>
+<h4>🗑️ Eliminar campo</h4>
+<div id="fieldDelete"></div>
+
+<hr>
+<button onclick="closeConfig()">Cerrar</button>
+
+</div>
+</div>
+
+<!-- CONFIRMAR VENTANA -->
+<div class="confirm" id="confirmModal">
+  <div class="confirmBox">
+    <h3>🗑️ Eliminar ventana</h3>
+    <p>¿Eliminar esta ventana y todo su contenido?</p>
+    <div class="row">
+      <button class="cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="delete" onclick="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMAR CAMPO -->
+<div class="confirm" id="confirmFieldModal">
+  <div class="confirmBox">
+    <h3>🗑️ Eliminar campo</h3>
+    <p>¿Seguro que deseas eliminar este campo?</p>
+    <div class="row">
+      <button class="cancel" onclick="closeFieldConfirm()">Cancelar</button>
+      <button class="delete" onclick="confirmDeleteField()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="modal" id="formModal">
+<div class="modalContent">
+<h3 id="formTitle"></h3>
+<div id="formFields"></div>
+<div class="row">
+<button onclick="sendWhats()">📤</button>
+<button onclick="clearForm()">🧹</button>
+<button onclick="closeForm()">Cerrar</button>
+</div>
+</div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("appData")) || {windows:[],wsap:""};
+let currentWin=null, dragIndex=null;
+let deleteIndex=null;
+let fieldDeleteWin=null, fieldDeleteIndex=null;
+
+const save=()=>localStorage.setItem("appData",JSON.stringify(data));
+
+function refreshSelectors(){
+  [editWin,delWin,dupWin,fieldWin,editFieldWin].forEach(s=>{
+    s.innerHTML=data.windows.map((w,i)=>`<option value="${i}">${w.icon} ${w.name}</option>`).join("");
+  });
+  loadFields();
+}
+
+function render(){
+  main.innerHTML="";
+  data.windows.forEach((w,i)=>{
+    let d=document.createElement("div");
+    d.className="card";
+    d.draggable=true;
+    d.innerHTML=`${w.icon}<br>${w.name}`;
+    d.onclick=()=>openForm(i);
+    d.ondragstart=()=>{dragIndex=i;d.classList.add("dragging")};
+    d.ondragend=()=>d.classList.remove("dragging");
+    d.ondragover=e=>e.preventDefault();
+    d.ondrop=e=>{
+      e.preventDefault();
+      let m=data.windows.splice(dragIndex,1)[0];
+      data.windows.splice(i,0,m);
+      save();render();
+    };
+    main.appendChild(d);
+  });
+}
+
+function openConfig(){
+  wsap.value=data.wsap||"";
+  refreshSelectors();
+  config.style.display="flex";
+}
+function closeConfig(){
+  data.wsap=wsap.value;
+  save();render();
+  config.style.display="none";
+}
+
+function addWindow(){
+  data.windows.push({name:vName.value,icon:vIcon.value,fields:[]});
+  vName.value=vIcon.value="";
+  save();openConfig();
+}
+
+function saveWindowEdit(){
+  let w=data.windows[editWin.value];
+  w.name=newWinName.value||w.name;
+  w.icon=newWinIcon.value||w.icon;
+  newWinName.value=newWinIcon.value="";
+  save();openConfig();
+}
+
+function deleteWindow(){
+  deleteIndex=delWin.value;
+  confirmModal.style.display="flex";
+}
+function confirmDelete(){
+  if(currentWin==deleteIndex){
+    closeForm();
+    formFields.innerHTML="";
+    currentWin=null;
+  }
+  data.windows.splice(deleteIndex,1);
+  save();
+  closeConfirm();
+  openConfig();
+}
+function closeConfirm(){
+  confirmModal.style.display="none";
+  deleteIndex=null;
+}
+
+function duplicateWindow(){
+  let b=data.windows[dupWin.value];
+  let c=JSON.parse(JSON.stringify(b));
+  c.name=dupName.value||b.name+" (copia)";
+  c.icon=dupIcon.value||b.icon;
+  data.windows.push(c);
+  dupName.value=dupIcon.value="";
+  save();openConfig();
+}
+
+function addField(){
+  let w=data.windows[fieldWin.value];
+  w.fields.push({
+    name:cName.value,icon:cIcon.value,type:cType.value,opt:cOpt.value,cam:cCam.checked
+  });
+  cName.value=cIcon.value=cOpt.value="";
+  cCam.checked=false;
+  save();
+}
+
+function loadFields(){
+  let w=data.windows[editFieldWin.value];
+  if(!w)return;
+  editField.innerHTML=w.fields.map((f,i)=>`<option value="${i}">${f.icon} ${f.name}</option>`).join("");
+  fieldDelete.innerHTML=w.fields.map((f,i)=>`
+    <div class="row">${f.icon} ${f.name}
+    <button onclick="deleteField(${editFieldWin.value},${i})">🗑️</button></div>
+  `).join("");
+}
+
+function saveFieldEdit(){
+  let w=data.windows[editFieldWin.value];
+  let f=w.fields[editField.value];
+  f.name=editFieldName.value||f.name;
+  f.icon=editFieldIcon.value||f.icon;
+  editFieldName.value=editFieldIcon.value="";
+  save();openConfig();
+}
+
+function deleteField(w,i){
+  fieldDeleteWin=w;
+  fieldDeleteIndex=i;
+  confirmFieldModal.style.display="flex";
+}
+function confirmDeleteField(){
+  data.windows[fieldDeleteWin].fields.splice(fieldDeleteIndex,1);
+  save();
+  closeFieldConfirm();
+  loadFields();
+}
+function closeFieldConfirm(){
+  confirmFieldModal.style.display="none";
+  fieldDeleteWin=fieldDeleteIndex=null;
+}
+
+function openForm(i){
+  currentWin=i;
+  let w=data.windows[i];
+  formTitle.innerText=w.icon+" "+w.name;
+  formFields.innerHTML="";
+  w.fields.forEach((f,idx)=>{
+    let d=document.createElement("div");
+    d.className="field";
+    d.innerHTML=`<label>${f.icon} ${f.name}</label>`;
+    if(f.type==="auto"){
+      d.innerHTML+=`<input value="${new Date().toLocaleString()}" disabled>`;
+    }else if(f.opt){
+      d.innerHTML+=`<select data-i="${idx}">${f.opt.split("|").map(o=>`<option>${o}</option>`).join("")}</select>`;
+    }else{
+      d.innerHTML+=`<input data-i="${idx}">`;
+    }
+    if(f.cam){
+      let fi=document.createElement("input");
+      fi.type="file";fi.accept="image/*";fi.capture="environment";
+      fi.onchange=()=>{let img=document.createElement("img");img.className="preview";img.src=URL.createObjectURL(fi.files[0]);fi.after(img)};
+      d.appendChild(fi);
+    }
+    formFields.appendChild(d);
+  });
+  formModal.style.display="flex";
+}
+
+function sendWhats(){
+  let w=data.windows[currentWin];
+  let msg=`${w.icon} ${w.name}\n\n`;
+  document.querySelectorAll("#formFields input,select").forEach(e=>{
+    if(e.dataset.i!==undefined){
+      let f=w.fields[e.dataset.i];
+      msg+=`${f.icon} ${f.name}: ${e.value}\n`;
+    }
+  });
+  window.open(`https://wa.me/${data.wsap}?text=`+encodeURIComponent(msg));
+}
+
+function clearForm(){
+  document.querySelectorAll("#formFields input").forEach(i=>!i.disabled&&(i.value=""));
+  document.querySelectorAll("img.preview").forEach(i=>i.remove());
+}
+function closeForm(){formModal.style.display="none"}
+
+render();
+</script>
+
+</body>
+</html>
