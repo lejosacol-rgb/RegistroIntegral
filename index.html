@@ -3,271 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexora | Portafolio Premium Asistente</title>
+<title>Registro Integral de Salud</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg:#0f0f1a;
-  --card:#18182a;
-  --accent1:#6a5cff;
-  --accent2:#00c2ff;
-  --text:#ffffff;
-  --sub:#b0b0d0;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-body{background:var(--bg);color:var(--text);overflow-x:hidden;scroll-behavior:smooth;}
-
-/* Navbar */
-nav{position:fixed;width:100%;top:0;left:0;background:rgba(15,15,26,0.95);padding:15px 30px;display:flex;justify-content:space-between;align-items:center;z-index:1000;border-bottom:1px solid rgba(106,92,255,0.2);}
-nav .logo{font-weight:700;font-size:1.5rem;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-nav .menu a{margin-left:25px;color:var(--text);text-decoration:none;font-weight:500;transition:0.3s;}
-nav .menu a:hover{color:var(--accent1);}
-
-/* Hero */
-header{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;}
-header h1{font-size:3rem;font-weight:700;background:linear-gradient(90deg,var(--accent1),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;transform:translateY(50px);transition:1s ease;}
-header p{margin-top:20px;font-size:1.2rem;color:var(--sub);max-width:650px;opacity:0;transform:translateY(50px);transition:1s ease 0.3s;}
-header .btn{margin-top:30px;padding:12px 28px;border:none;border-radius:30px;background:linear-gradient(90deg,var(--accent1),var(--accent2));color:white;font-weight:600;cursor:pointer;transition:0.3s;opacity:0;transform:translateY(50px);transition:1s ease 0.6s;}
-header .btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.4);}
-
-/* Sections */
-section{padding:80px 20px;max-width:1200px;margin:auto;}
-.section-title{text-align:center;margin-bottom:50px;font-size:2rem;font-weight:600;}
-
-/* Projects */
-.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;}
-.card{background:var(--card);padding:30px;border-radius:20px;transition:0.4s;border:1px solid rgba(255,255,255,0.05);opacity:0;transform:translateY(30px);}
-.card:hover{transform:translateY(-8px);border:1px solid rgba(106,92,255,0.5);}
-.card h3{margin-bottom:15px;}
-.card p{color:var(--sub);font-size:0.95rem;margin-bottom:20px;}
-.card button{padding:8px 18px;border-radius:20px;border:none;background:var(--accent1);color:white;cursor:pointer;transition:0.3s;}
-.card button:hover{background:var(--accent2);}
-
-/* Filter Buttons */
-.filter-btn{background:var(--card);color:var(--text);border:none;padding:10px 18px;margin:0 5px;border-radius:20px;cursor:pointer;transition:0.3s;}
-.filter-btn:hover, .filter-btn.active{background:var(--accent1);color:white;}
-
-/* About */
-.about{text-align:center;max-width:800px;margin:auto;color:var(--sub);font-size:1rem;line-height:1.7;}
-
-/* Footer */
-footer{text-align:center;padding:40px 20px;background:#0c0c15;color:var(--sub);font-size:0.9rem;}
-
-/* Particle Background */
-#particles-js{position:absolute;width:100%;height:100%;top:0;left:0;z-index:0;}
-header > *{position:relative;z-index:1;}
-
-/* Modal Styles */
-.modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;overflow:auto;background:rgba(0,0,0,0.85);}
-.modal-content{background:var(--card);margin:10% auto;padding:20px;border-radius:16px;width:90%;max-width:800px;animation:fadeIn 0.5s ease;}
-.close{color:var(--accent1);float:right;font-size:28px;font-weight:bold;cursor:pointer;}
-.close:hover{color:var(--accent2);}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-
-/* Assistant Button */
-#assistant-btn{position:fixed;bottom:30px;right:30px;width:60px;height:60px;border-radius:50%;background:var(--accent1);display:flex;justify-content:center;align-items:center;cursor:pointer;z-index:3000;font-size:28px;}
-#assistant-modal{display:none;position:fixed;bottom:100px;right:30px;width:300px;height:400px;background:var(--card);border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.4);z-index:3001;flex-direction:column;overflow:hidden;}
-#assistant-modal .header{background:var(--accent1);padding:10px;color:white;font-weight:600;}
-#assistant-messages{flex:1;padding:10px;overflow-y:auto;color:var(--sub);font-size:0.9rem;}
-#assistant-input{flex:1;padding:10px;border:none;border-top:1px solid rgba(255,255,255,0.1);background:#111123;color:white;}
-#assistant-send{padding:10px;background:var(--accent2);border:none;color:white;cursor:pointer;}
-</style>
+<link rel="stylesheet" href="css/styles.css">
+</head>
 
 <body>
 
-<!-- Navbar -->
-<nav>
-  <div class="logo">Nexora</div>
-  <div class="menu">
-    <a href="#proyectos">Proyectos</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#contacto">Contacto</a>
-  </div>
-</nav>
+<div id="splash">
+  <h1>🏥 Registro Integral</h1>
+  <p>Sistema de Salud</p>
+</div>
 
-<!-- Hero -->
 <header>
-  <div id="particles-js"></div>
-  <h1>Nexora</h1>
-  <p>Tecnología que transforma ideas en sistemas reales.</p>
-  <button class="btn" onclick="scrollToProjects()">Ver Proyectos</button>
+  🏥 Registro Integral
+  <button onclick="openConfig()">⚙️</button>
 </header>
 
-<!-- Projects -->
-<section id="proyectos">
-  <h2 class="section-title">Proyectos Destacados</h2>
+<main id="main"></main>
 
-  <!-- Filtros -->
-  <div style="text-align:center;margin-bottom:30px;">
-    <button class="filter-btn active" data-filter="all">Todos</button>
-    <button class="filter-btn" data-filter="finanzas">Finanzas</button>
-    <button class="filter-btn" data-filter="Studio">Studio</button>
-    <button class="filter-btn" data-filter="Conversor Ultra PRO+">Conversor Ultra PRO+</button>
-  </div>
+<!-- CONFIG -->
+<div class="modal" id="config">
+<div class="modalContent">
 
-  <div class="projects">
+<h3>⚙️ Configuración</h3>
 
-    <div class="card" data-category="finanzas">
-      <h3>Control de Pagos</h3>
-      <img src="mockups/control-pagos.png" alt="Control de Pagos" style="width:100%;border-radius:12px;margin-bottom:15px;">
-      <p>Sistema avanzado para gestión de clientes y abonos con interfaz moderna.</p>
-      <button onclick="openModal('modal1')">Ver Demo</button>
+<label>📤 WhatsApp</label>
+<input id="wsap" placeholder="Ej: 573001234567">
+
+<hr>
+<h4>➕ Crear ventana</h4>
+<input id="vName" placeholder="Nombre">
+<input id="vIcon" placeholder="Emoji">
+<button onclick="addWindow()">Agregar</button>
+
+<hr>
+<h4>✏️ Editar ventana</h4>
+<select id="editWin"></select>
+<input id="newWinName" placeholder="Nuevo nombre">
+<input id="newWinIcon" placeholder="Nuevo emoji">
+<button onclick="saveWindowEdit()">Guardar</button>
+
+<hr>
+<h4>🗑️ Eliminar ventana</h4>
+<select id="delWin"></select>
+<button onclick="deleteWindow()">Eliminar</button>
+
+<hr>
+<h4>📄 Duplicar ventana</h4>
+<select id="dupWin"></select>
+<input id="dupName" placeholder="Nuevo nombre">
+<input id="dupIcon" placeholder="Nuevo emoji">
+<button onclick="duplicateWindow()">Duplicar</button>
+
+<hr>
+<h4>🧩 Crear campo</h4>
+<select id="fieldWin"></select>
+<input id="cName" placeholder="Nombre campo">
+<input id="cIcon" placeholder="Emoji">
+<select id="cType">
+  <option value="text">Texto</option>
+  <option value="number">Número</option>
+  <option value="auto">Automático</option>
+</select>
+<input id="cOpt" placeholder="Opciones | separadas">
+<label><input type="checkbox" id="cCam"> Cámara</label>
+<button onclick="addField()">Agregar campo</button>
+
+<hr>
+<h4>✏️ Editar campo</h4>
+<select id="editFieldWin" onchange="loadFields()"></select>
+<select id="editField"></select>
+<input id="editFieldName" placeholder="Nuevo nombre">
+<input id="editFieldIcon" placeholder="Nuevo emoji">
+<button onclick="saveFieldEdit()">Guardar</button>
+
+<hr>
+<h4>🗑️ Eliminar campo</h4>
+<div id="fieldDelete"></div>
+
+<hr>
+<button onclick="closeConfig()">Cerrar</button>
+
+</div>
+</div>
+
+<!-- CONFIRMAR -->
+<div class="confirm" id="confirmModal">
+  <div class="confirmBox">
+    <h3>🗑️ Eliminar ventana</h3>
+    <p>¿Eliminar esta ventana y todo su contenido?</p>
+    <div class="row">
+      <button class="cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="delete" onclick="confirmDelete()">Eliminar</button>
     </div>
+  </div>
+</div>
 
-    <div class="card" data-category="Studio">
-      <h3>Nexora Studio</h3>
-      <img src="mockups/Nexora-Studio.png" alt="Nexora Studio" style="width:100%;border-radius:12px;margin-bottom:15px;">
-      <p>Editor visual para crear proyectos web y exportarlos facilmente ahora.</p>
-      <button onclick="openModal('modal2')">Ver Demo</button>
+<div class="confirm" id="confirmFieldModal">
+  <div class="confirmBox">
+    <h3>🗑️ Eliminar campo</h3>
+    <p>¿Seguro que deseas eliminar este campo?</p>
+    <div class="row">
+      <button class="cancel" onclick="closeFieldConfirm()">Cancelar</button>
+      <button class="delete" onclick="confirmDeleteField()">Eliminar</button>
     </div>
-    
-    <div class="card" data-category="Conversor Ultra PRO+">
-      <h3>Conversor Ultra PRO+</h3>
-      <img src="mockups/Conversor-Ultra PRO+.png" alt="Conversor Ultra PRO" style="width:100%;border-radius:12px;margin-bottom:15px;">
-      <p>  Aplicación diseñada para consultar en tiempo real el precio del dólar, mostrando tasas oficiales y del mercado.</p>
-      <button onclick="openModal('modal3')">Ver Demo</button>
-    </div>
-
-  </div>
-</section>
-
-<!-- Modals -->
-<div id="modal1" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal1')">&times;</span>
-    <h3>Control de Pagos</h3>
-    <iframe src="demo/control-pagos/index.html" style="width:100%;height:400px;border:none;border-radius:12px;"></iframe>
   </div>
 </div>
 
-<div id="modal2" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal2')">&times;</span>
-    <h3>Nexora Studio</h3>
-    <iframe src="demo/Nexora-Studio/index.html" style="width:100%;height:400px;border:none;border-radius:12px;"></iframe>
-  </div>
+<!-- FORM -->
+<div class="modal" id="formModal">
+<div class="modalContent">
+<h3 id="formTitle"></h3>
+<div id="formFields"></div>
+<div class="row">
+<button onclick="sendWhats()">📤</button>
+<button onclick="clearForm()">🧹</button>
+<button onclick="closeForm()">Cerrar</button>
+</div>
+</div>
 </div>
 
-<div id="modal3" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('modal3')">&times;</span>
-    <h3>Conversor Ultra PRO+</h3>
-    <iframe src="demo/Conversor-Ultra PRO+/index.html" style="width:100%;height:400px;border:none;border-radius:12px;"></iframe>
-  </div>
-</div>
-
-<!-- About -->
-<section id="sobre">
-  <h2 class="section-title">Sobre Nexora</h2>
-  <div class="about">
-    Nexora es una iniciativa tecnológica enfocada en el desarrollo de soluciones digitales funcionales,
-    modernas y escalables. Cada proyecto está diseñado con precisión, rendimiento y experiencia de usuario
-    como prioridad.
-  </div>
-</section>
-
-<!-- Contact -->
-<section id="contacto">
-  <h2 class="section-title">Contacto Profesional</h2>
-  <div style="max-width:600px;margin:auto;text-align:center;color:var(--sub);">
-    Email: <strong>tuemail@ejemplo.com</strong><br>
-    LinkedIn: <strong>TuPerfilLinkedIn</strong><br>
-    GitHub: <strong>TuUsuarioGitHub</strong>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer>
-  © 2026 Nexora. Fundado por Lejosaco.
-</footer>
-
-<!-- Assistant -->
-<div id="assistant-btn">💡</div>
-<div id="assistant-modal">
-  <div class="header">Asistente Nexora</div>
-  <div id="assistant-messages"></div>
-  <div style="display:flex;">
-    <input id="assistant-input" type="text" placeholder="Escribe tu pregunta...">
-    <button id="assistant-send">Enviar</button>
-  </div>
-</div>
-
-<!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-<script>
-function scrollToProjects(){document.getElementById("proyectos").scrollIntoView({behavior:"smooth"});}
-function openModal(id){document.getElementById(id).style.display="block";}
-function closeModal(id){document.getElementById(id).style.display="none";}
-
-// Animations
-const faders = document.querySelectorAll('header h1, header p, header .btn, .card');
-window.addEventListener('load',()=>{
-  faders.forEach((el,i)=>{ setTimeout(()=>{ el.style.opacity=1; el.style.transform='translateY(0)'; }, i*300); });
-});
-
-// Particles.js
-particlesJS('particles-js',
-{"particles":{"number":{"value":50},"color":{"value":"#6a5cff"},"shape":{"type":"circle"},"opacity":{"value":0.3},"size":{"value":3},"line_linked":{"enable":true,"distance":120,"color":"#6a5cff","opacity":0.2,"width":1},"move":{"enable":true,"speed":1}},"interactivity":{"detect_on":"canvas","events":{"onhover":{"enable":true,"mode":"repulse"}}}});
-
-// Filters
-const filterBtns = document.querySelectorAll('.filter-btn');
-const cards = document.querySelectorAll('.card');
-filterBtns.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    filterBtns.forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const filter = btn.getAttribute('data-filter');
-    cards.forEach(card=>{
-      card.style.display = (filter==='all'||card.getAttribute('data-category')===filter)?'block':'none';
-    });
-  });
-});
-
-// Assistant
-const assistantBtn = document.getElementById('assistant-btn');
-const assistantModal = document.getElementById('assistant-modal');
-const messagesDiv = document.getElementById('assistant-messages');
-const input = document.getElementById('assistant-input');
-const sendBtn = document.getElementById('assistant-send');
-
-assistantBtn.addEventListener('click',()=>{
-  assistantModal.style.display = assistantModal.style.display==='flex'?'none':'flex';
-  assistantModal.style.flexDirection='column';
-});
-
-sendBtn.addEventListener('click', assistantReply);
-input.addEventListener('keydown', e=>{ if(e.key==='Enter') assistantReply(); });
-
-function assistantReply(){
-  const question = input.value.trim();
-  if(!question) return;
-  
-  const userMsg = document.createElement('div');
-  userMsg.style.color='white';
-  userMsg.style.marginBottom='5px';
-  userMsg.textContent = "Tú: " + question;
-  messagesDiv.appendChild(userMsg);
-
-  let answer = "No entendí tu pregunta 😅";
-
-  if(question.toLowerCase().includes("control de pagos")) answer = "El Control de Pagos permite gestionar clientes, abonos y estado de cuentas con interfaz moderna.";
-  else if(question.toLowerCase().includes("registro integral de salud")) answer = "El Registro Integral de Salud administra historial clínico y seguimiento de pacientes.";
-  else if(question.toLowerCase().includes("registro de novedades")) answer = "La App Registro de Novedades registra ingresos, salidas y eventos automáticamente.";
-  else if(question.toLowerCase().includes("filtrar")) answer = "Usa los botones de filtro arriba de los proyectos para mostrar la categoría deseada.";
-
-  const botMsg = document.createElement('div');
-  botMsg.style.color= 'var(--accent2)';
-  botMsg.style.marginBottom='10px';
-  botMsg.textContent = "Asistente: " + answer;
-  messagesDiv.appendChild(botMsg);
-
-  messagesDiv.scrollTop = messagesDiv.scrollHeight;
-  input.value='';
-}
-</script>
-
+<script src="js/app.js"></script>
 </body>
 </html>
